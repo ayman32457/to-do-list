@@ -1,61 +1,99 @@
-# Notes & Todo App
 
-Simple notes application with a REST API and a small client.
+# Todo API
 
-Features
-- Create text notes and todo-lists (POST)
-- List saved notes and todo-lists (GET)
-- Data persisted to a JSON file at `data/data.json`
+## Hva er dette?
 
-Start (minimal)
+Dette er en enkel todo-applikasjon som består av:
 
-Kjør alt med én kommando (ingen installasjon nødvendig):
+* en server (API)
+* en klient (terminalprogram)
 
-```
-node server-no-deps.js
-```
+Serveren lagrer todo-lister i en JSON-fil, og klienten henter og sender data til serveren.
 
-Serveren vil serve klienten på `http://localhost:3000` og API-et på `/api/notes`.
+---
 
-API examples
+## Hvordan starte prosjektet
 
-- Get all notes:
+### 1. Installer avhengigheter
 
-  ```sh
-  curl http://localhost:3000/api/notes
-  ```
-
-- Create a text note:
-
-  ```sh
-  curl -X POST http://localhost:3000/api/notes \
-    -H "Content-Type: application/json" \
-    -d '{"type":"text","title":"Hello","content":"This is a note"}'
-  ```
-
-- Create a todo list:
-
-  ```sh
-  curl -X POST http://localhost:3000/api/notes \
-    -H "Content-Type: application/json" \
-    -d '{"type":"todo","title":"Groceries","items":[{"text":"Milk","done":false},{"text":"Eggs","done":false}]}'
-  ```
-
-Notes on development
-- The server is a minimal Express app that persists notes to `data/data.json`.
-- The client (in `public/`) is a tiny single-page UI that uses `fetch()` to talk to the API.
-
-Next steps / improvements
-- Add validation and better error handling
-- Add update/delete endpoints (PUT/DELETE)
-- Add user separation and authentication
-
-Run without installing dependencies
-
-If you cannot (or don't want to) install Node packages you can run the included fallback server which uses only Node built-ins:
+Kjør i terminal:
 
 ```
-node server-no-deps.js
+npm install express
 ```
 
-This serves the same client and API on port 3000.
+### 2. Start serveren
+
+```
+node server.js
+```
+
+### 3. Start klienten (i en ny terminal)
+
+```
+node client.js
+```
+
+---
+
+## Hvordan bruke klienten
+
+Når du starter klienten får du en meny:
+
+```
+1: Hent alle
+2: Hent en
+3: Ny todo
+4: Exit
+```
+
+### 1. Hent alle
+
+Viser alle todo-lister (id og title)
+
+### 2. Hent en
+
+Skriv inn id for å hente en spesifikk todo
+
+### 3. Ny todo
+
+Oppretter en ny todo med:
+
+* tittel
+* én oppgave
+
+---
+
+## API
+
+### GET /todos
+
+Henter alle todo-lister (id og title)
+
+### GET /todos/:id
+
+Henter én todo basert på id
+
+### POST /todos
+
+Oppretter en ny todo
+
+---
+
+## Lagring
+
+Alle todo-lister lagres i filen:
+
+```
+todos.json
+```
+
+Når du lager en ny todo, blir filen oppdatert automatisk.
+
+---
+
+## Kort oppsummert
+
+* Server håndterer data
+* Klient sender forespørsler
+* Data lagres i JSON-fil
