@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Notes & Todo App</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Arial; padding: 1rem; max-width: 900px; margin: auto }
+      .note { border: 1px solid #ddd; padding: 0.6rem; margin-bottom: 0.6rem; border-radius: 6px }
+      .todo-item { display:flex; gap:8px; align-items:center }
+      button { cursor:pointer }
+    </style>
+  </head>
+  <body>
+    <h1>Notes & Todo App</h1>
+
+    <section>
+      <h2>Create note</h2>
+      <label>Type: <select id="note-type">
+        <option value="text">Text note</option>
+        <option value="todo">Todo list</option>
+      </select></label>
+
+      <div id="text-form">
+        <p><input id="text-title" placeholder="Title" style="width:100%"/></p>
+        <p><textarea id="text-content" placeholder="Write your note..." rows="4" style="width:100%"></textarea></p>
+      </div>
+
+      <div id="todo-form" style="display:none">
+        <p><input id="todo-title" placeholder="Title" style="width:100%"/></p>
+        <div id="todo-items"></div>
+        <p>
+          <input id="new-todo-item" placeholder="New item" style="width:70%"/>
+          <button id="add-item">Add item</button>
+        </p>
+      </div>
+
+      <p><button id="create">Create</button></p>
+    </section>
+
+    <hr />
+
+    <section>
+      <h2>Saved notes</h2>
+      <div id="notes"></div>
+    </section>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
