@@ -1,4 +1,4 @@
-# Minimal notat-app
+ notat-app
 
 Kjør serveren (ingen installasjon nødvendig):
 
