@@ -1,4 +1,4 @@
-// Simple client-side JS for the notes app
+
 const base = '/api/notes';
 
 async function fetchNotes() {
@@ -88,6 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
     await loadAndRender();
   });
 
-  // initial load
+  
   loadAndRender();
 });

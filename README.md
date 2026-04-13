@@ -19,4 +19,3 @@ Data lagres i `data/data.json`.
 
 Det er alt — veldig enkelt.
 
-nettleser: http://localhost:3000

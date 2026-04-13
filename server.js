@@ -28,9 +28,7 @@ app.get('/api/notes', (req, res) => {
 	res.json(data);
 });
 
-// POST a new note
-// Body should include at least { type: 'text'|'todo', title: string, content: string } for text
-// For todo: { type: 'todo', title: string, items: [{ text, done }] }
+
 app.post('/api/notes', (req, res) => {
 	const note = req.body;
 	if (!note || !note.type) {
