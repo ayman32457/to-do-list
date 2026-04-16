@@ -5,10 +5,176 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Notes & Todo App</title>
     <style>
-      body { font-family: system-ui, -apple-system, Arial; padding: 1rem; max-width: 900px; margin: auto }
-      .note { border: 1px solid #ddd; padding: 0.6rem; margin-bottom: 0.6rem; border-radius: 6px }
-      .todo-item { display:flex; gap:8px; align-items:center }
-      button { cursor:pointer }
+      :root {
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      }
+
+      body { 
+        font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+        background-color: var(--bg);
+        color: var(--text-main);
+        line-height: 1.5;
+        padding: 2rem 1rem; 
+        max-width: 700px; 
+        margin: auto;
+      }
+
+      h1 {
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        color: var(--primary);
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+        margin-bottom: 1.2rem;
+        color: var(--text-main);
+        font-weight: 700;
+      }
+
+      /* Container Cards */
+      section {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+        border: 1px solid var(--border);
+      }
+
+      hr {
+        border: 0;
+        height: 1px;
+        background: var(--border);
+        margin: 2.5rem 0;
+      }
+
+      /* Form Elements */
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      input, textarea, select {
+        font-family: inherit;
+        font-size: 0.95rem;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #fff;
+        transition: all 0.2s ease;
+        width: 100%;
+        box-sizing: border-box; /* Ensures padding doesn't break width */
+      }
+
+      input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+      }
+
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+      }
+
+      /* Buttons */
+      button {
+        cursor: pointer;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      button:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      #add-item {
+        background-color: #f1f5f9;
+        color: var(--text-main);
+        border: 1px solid var(--border);
+        white-space: nowrap;
+      }
+
+      #add-item:hover {
+        background-color: var(--border);
+      }
+
+      #create {
+        width: 100%;
+        font-size: 1rem;
+        margin-top: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+      }
+
+      /* Todo specific layout */
+      .todo-input-group {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      /* Saved Notes Styling */
+      .note { 
+        background: white;
+        border: 1px solid var(--border);
+        padding: 1.25rem; 
+        margin-bottom: 1rem; 
+        border-radius: 10px;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .note:hover {
+        transform: scale(1.01);
+        box-shadow: var(--shadow);
+      }
+
+      .note h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+        color: var(--text-main);
+      }
+
+      .todo-item { 
+        display: flex; 
+        gap: 10px; 
+        align-items: center; 
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f8fafc;
+      }
+
+      input[type="checkbox"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        cursor: pointer;
+        accent-color: var(--primary);
+      }
     </style>
   </head>
   <body>
@@ -16,33 +182,44 @@
 
     <section>
       <h2>Create note</h2>
-      <label>Type: <select id="note-type">
-        <option value="text">Text note</option>
-        <option value="todo">Todo list</option>
-      </select></label>
+      
+      <div class="form-group">
+        <label for="note-type">Note Type</label>
+        <select id="note-type">
+          <option value="text">Text note</option>
+          <option value="todo">Todo list</option>
+        </select>
+      </div>
 
       <div id="text-form">
-        <p><input id="text-title" placeholder="Title" style="width:100%"/></p>
-        <p><textarea id="text-content" placeholder="Write your note..." rows="4" style="width:100%"></textarea></p>
+        <div class="form-group">
+          <input id="text-title" placeholder="Note Title" />
+        </div>
+        <div class="form-group">
+          <textarea id="text-content" placeholder="Write your note here..." rows="4"></textarea>
+        </div>
       </div>
 
       <div id="todo-form" style="display:none">
-        <p><input id="todo-title" placeholder="Title" style="width:100%"/></p>
+        <div class="form-group">
+          <input id="todo-title" placeholder="List Title" />
+        </div>
         <div id="todo-items"></div>
-        <p>
-          <input id="new-todo-item" placeholder="New item" style="width:70%"/>
-          <button id="add-item">Add item</button>
-        </p>
+        <div class="todo-input-group">
+          <input id="new-todo-item" placeholder="Add a new task..." />
+          <button id="add-item">Add Item</button>
+        </div>
       </div>
 
-      <p><button id="create">Create</button></p>
+      <button id="create">Save Note</button>
     </section>
 
     <hr />
 
     <section>
       <h2>Saved notes</h2>
-      <div id="notes"></div>
+      <div id="notes">
+        </div>
     </section>
 
     <script src="/app.js"></script>
