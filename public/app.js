@@ -1,4 +1,69 @@
-window.onload = async () => {
+const base = '/api/notes';
+
+async function fetchNotes() {
+  const res = await fetch(base);
+  return res.json();
+}
+
+function el(sel, text) {
+  const e = document.createElement(sel);
+  if (text) e.textContent = text;
+  return e;
+}
+
+function renderNotes(notes) {
+  const container = document.getElementById('notes');
+  container.innerHTML = '';
+
+  notes.forEach(n => {
+    const d = document.createElement('div');
+    d.className = 'note';
+
+    const h = document.createElement('div');
+    h.innerHTML = `<strong>${n.title || '(no title)'}</strong>
+      <small style="color:#666; margin-left:8px">
+      ${n.createdAt ? new Date(n.createdAt).toLocaleString() : ''}
+      </small>`;
+
+    d.appendChild(h);
+
+    if (n.type === 'text') {
+      const p = el('p', n.content || '');
+      d.appendChild(p);
+    }
+
+    if (n.type === 'todo') {
+      const wrap = document.createElement('div');
+
+      (n.items || []).forEach(it => {
+        const row = document.createElement('div');
+        row.className = 'todo-item';
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = !!it.done;
+        cb.disabled = true;
+
+        const span = el('span', it.text || '');
+
+        row.appendChild(cb);
+        row.appendChild(span);
+        wrap.appendChild(row);
+      });
+
+      d.appendChild(wrap);
+    }
+
+    container.appendChild(d);
+  });
+}
+
+async function loadAndRender() {
+  const notes = await fetchNotes();
+  renderNotes(notes);
+}
+
+window.onload = () => {
   const typeSel = document.getElementById('note-type');
   const textForm = document.getElementById('text-form');
   const todoForm = document.getElementById('todo-form');
@@ -26,7 +91,7 @@ window.onload = async () => {
 
     const remove = document.createElement('button');
     remove.textContent = 'Remove';
-    remove.addEventListener('click', () => row.remove());
+    remove.onclick = () => row.remove();
 
     row.appendChild(span);
     row.appendChild(remove);
@@ -42,15 +107,14 @@ window.onload = async () => {
       const title = document.getElementById('text-title').value.trim();
       const content = document.getElementById('text-content').value.trim();
 
-      const payload = { type: 'text', title, content };
-
       await fetch(base, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ type: 'text', title, content })
       });
+    }
 
-    } else {
+    if (type === 'todo') {
       const title = document.getElementById('todo-title').value.trim();
 
       const items = Array.from(todoItems.children).map(c => ({
@@ -58,12 +122,10 @@ window.onload = async () => {
         done: false
       }));
 
-      const payload = { type: 'todo', title, items };
-
       await fetch(base, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ type: 'todo', title, items })
       });
 
       todoItems.innerHTML = '';
@@ -73,8 +135,9 @@ window.onload = async () => {
     document.getElementById('text-title').value = '';
     document.getElementById('text-content').value = '';
 
-    await loadAndRender();
+    loadAndRender();
   });
 
-  await loadAndRender();
+  showForm('text');
+  loadAndRender();
 };
