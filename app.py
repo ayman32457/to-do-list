@@ -5,6 +5,13 @@ import json
 import os
 from fastapi.middleware.cors import CORSMiddleware
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
+
+
+app.mount("/public", StaticFiles(directory="public"), name="public")
+
 HERE = os.path.dirname(__file__)
 DATA_PATH = os.path.join(HERE, 'data', 'data.json')
 
@@ -18,6 +25,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def home():
+    return FileResponse("public/index.html")
 
 class TodoItem(BaseModel):
     text: str
