@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Notes & Todo App</title>
+    <!--
+      Enkel klient for notatappen.
+      - Et skjema øverst for å lage tekstnotater eller todo-lister
+      - En seksjon under som viser lagrede notater hentet fra /api/notes
+      - Klienten bruker /public/app.js for interaksjon og API-kall
+    -->
     <style>
       :root {
         --primary: #ff00ee;
@@ -178,7 +184,7 @@
     </style>
   </head>
   <body>
-    <h1>Notes & Todo App</h1>
+  <h1>Notes & Todo App</h1>
 
     <section>
       <h2>Create note</h2>
@@ -218,8 +224,8 @@
 
     <section>
       <h2>Saved notes</h2>
-      <div id="notes">
-        </div>
+      <!-- Her rendres notater dynamisk av public/app.js -->
+      <div id="notes"></div>
     </section>
 
 <script src="/public/app.js"></script>
